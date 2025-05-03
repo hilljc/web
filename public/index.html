@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music City Events</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo">Music City Events</div>
+            <nav>
+                <ul>
+                    <li><a href="index.html" class="active">Home</a></li>
+                    <li><a href="venue.html">Venues</a></li>
+                    <li><a href="artist.html">Artists</a></li>
+                    <li><a href="admin.html">Admin</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="page-container">
+        <div class="controls-container">
+            <div class="search-filter">
+                <input type="text" id="search-input" placeholder="Search by artist...">
+                <input type="date" id="date-filter">
+                <button id="reset-filters">Reset Filters</button>
+            </div>
+            <div class="sort-container">
+                <label for="sort-by">Sort by:</label>
+                <select id="sort-by">
+                    <option value="date">Date</option>
+                    <option value="venue">Venue</option>
+                    <option value="artist">Artist</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="content-wrapper">
+            <main>
+                <div id="shows-container" class="shows-container">
+                    <!-- Shows will be populated here by JavaScript -->
+                    <p class="loading">Loading shows...</p>
+                </div>
+            </main>
+
+            <aside class="sidebar">
+                <div class="upcoming-info" id="upcoming-info">
+                    <h2>This Week's Shows</h2>
+                    <p class="current-date">Today: May 3, 2025</p>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>About Us</h3>
+                <p>Music City Events connects music lovers with their favorite artists and venues.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2025 Music City Events. All rights reserved.
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

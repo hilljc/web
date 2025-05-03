@@ -6,7 +6,7 @@ const adminShowsContainer = document.getElementById('admin-shows-container');
 const showForm = document.getElementById('show-form');
 
 // API URL - can be easily updated when moving to a database backend
-const API_URL = 'http://localhost:3000/api';
+const API_URL = '/api';
 
 // Fetch shows data from the API
 async function fetchShows() {

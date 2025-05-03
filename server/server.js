@@ -8,12 +8,12 @@ const PORT = 3000;
 // Middleware
 app.use(cors()); // Enable CORS for all routes
 app.use(express.json()); // Parse JSON request bodies
-app.use(express.static('.')); // Serve static files from current directory
+app.use(express.static(path.join(__dirname, '../public'))); // Serve static files from public directory
 
 // Route to get all artists
 app.get('/api/artists', (req, res) => {
     try {
-        const csvFilePath = path.join(__dirname, 'artists.csv');
+        const csvFilePath = path.join(__dirname, 'data/artists.csv');
         const csvData = fs.readFileSync(csvFilePath, 'utf8');
         
         // Parse CSV and return as JSON
@@ -29,7 +29,7 @@ app.get('/api/artists', (req, res) => {
 app.get('/api/artists/:id', (req, res) => {
     try {
         const artistId = parseInt(req.params.id);
-        const csvFilePath = path.join(__dirname, 'artists.csv');
+        const csvFilePath = path.join(__dirname, 'data/artists.csv');
         const csvData = fs.readFileSync(csvFilePath, 'utf8');
         
         const artists = parseCSV(csvData);
@@ -49,7 +49,7 @@ app.get('/api/artists/:id', (req, res) => {
 // Route to get all venues
 app.get('/api/venues', (req, res) => {
     try {
-        const csvFilePath = path.join(__dirname, 'venues.csv');
+        const csvFilePath = path.join(__dirname, 'data/venues.csv');
         const csvData = fs.readFileSync(csvFilePath, 'utf8');
         
         // Parse CSV and return as JSON
@@ -65,7 +65,7 @@ app.get('/api/venues', (req, res) => {
 app.get('/api/venues/:id', (req, res) => {
     try {
         const venueId = parseInt(req.params.id);
-        const csvFilePath = path.join(__dirname, 'venues.csv');
+        const csvFilePath = path.join(__dirname, 'data/venues.csv');
         const csvData = fs.readFileSync(csvFilePath, 'utf8');
         
         const venues = parseCSV(csvData);
@@ -86,9 +86,9 @@ app.get('/api/venues/:id', (req, res) => {
 app.get('/api/shows', (req, res) => {
     try {
         // Read all three CSV files
-        const showsPath = path.join(__dirname, 'shows.csv');
-        const artistsPath = path.join(__dirname, 'artists.csv');
-        const venuesPath = path.join(__dirname, 'venues.csv');
+        const showsPath = path.join(__dirname, 'data/shows.csv');
+        const artistsPath = path.join(__dirname, 'data/artists.csv');
+        const venuesPath = path.join(__dirname, 'data/venues.csv');
         
         const showsData = fs.readFileSync(showsPath, 'utf8');
         const artistsData = fs.readFileSync(artistsPath, 'utf8');
@@ -169,7 +169,7 @@ app.post('/api/shows', (req, res) => {
         
         const csvData = convertToCSV(showsToSave);
         
-        const csvFilePath = path.join(__dirname, 'shows.csv');
+        const csvFilePath = path.join(__dirname, 'data/shows.csv');
         fs.writeFileSync(csvFilePath, csvData, 'utf8');
         
         res.json({ success: true, message: 'Shows data saved successfully' });
@@ -216,6 +216,11 @@ function convertToCSV(items) {
     
     return [headers, ...rows].join('\n');
 }
+
+// Serve index.html for the root route
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/index.html'));
+});
 
 // Start the server
 app.listen(PORT, () => {

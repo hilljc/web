@@ -1,5 +1,5 @@
 // API URL - can be easily updated when moving to a database backend
-const API_URL = 'http://localhost:3000/api';
+const API_URL = '/api';
 
 // DOM elements
 const artistDetailsContainer = document.getElementById('artist-details');
