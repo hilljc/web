@@ -136,6 +136,16 @@ function renderShows(showsToRender) {
         shows.forEach(show => {
             const showCard = document.createElement('div');
             showCard.classList.add('show-card');
+            showCard.dataset.venueId = show.venueId;
+            
+            // Make the show card clickable, linking to venue details
+            showCard.addEventListener('click', (event) => {
+                // Don't navigate if user clicked on the artist link
+                if (event.target.tagName !== 'A') {
+                    window.location.href = `venue.html?id=${show.venueId}`;
+                }
+            });
+            showCard.style.cursor = 'pointer';
             
             // Format show date for display
             const formattedDate = formatDate(show.date);
@@ -144,7 +154,7 @@ function renderShows(showsToRender) {
             if (sortBy === 'date') {
                 // When grouped by date, emphasize time, venue, and artist
                 showCard.innerHTML = `
-                    <h3>${show.bandName}</h3>
+                    <h3><a href="artist.html?id=${show.artistId}" class="artist-link">${show.bandName}</a></h3>
                     <p class="show-info"><strong>Time:</strong> ${formatTime(show.time)}</p>
                     <p class="show-info"><strong>Venue:</strong> ${show.venue}</p>
                     <p class="show-info"><strong>Address:</strong> ${show.address}</p>
@@ -152,7 +162,7 @@ function renderShows(showsToRender) {
             } else if (sortBy === 'venue') {
                 // When grouped by venue, emphasize date, time, and artist
                 showCard.innerHTML = `
-                    <h3>${show.bandName}</h3>
+                    <h3><a href="artist.html?id=${show.artistId}" class="artist-link">${show.bandName}</a></h3>
                     <p class="show-info"><strong>Date:</strong> ${formattedDate}</p>
                     <p class="show-info"><strong>Time:</strong> ${formatTime(show.time)}</p>
                     <p class="show-info"><strong>Address:</strong> ${show.address}</p>
@@ -311,10 +321,19 @@ function displayUpcomingShows(allShows) {
                 const showItem = document.createElement('div');
                 showItem.classList.add('upcoming-show-item');
                 
+                // Make the show item clickable, linking to venue details
+                showItem.addEventListener('click', (event) => {
+                    // Don't navigate if user clicked on the artist link
+                    if (event.target.tagName !== 'A') {
+                        window.location.href = `venue.html?id=${show.venueId}`;
+                    }
+                });
+                showItem.style.cursor = 'pointer';
+                
                 showItem.innerHTML = `
                     <div class="upcoming-show-time">${formatTime(show.time)}</div>
                     <div class="upcoming-show-details">
-                        <div class="upcoming-show-band">${show.bandName}</div>
+                        <a href="artist.html?id=${show.artistId}" class="upcoming-show-band">${show.bandName}</a>
                         <div class="upcoming-show-venue">${show.venue}</div>
                     </div>
                 `;

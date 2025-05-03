@@ -309,3 +309,113 @@ label {
     font-size: 0.9em;
     color: #666;
 }
+
+/* Details page styles */
+.details-page {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+}
+
+.details-container h1 {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.details-card {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 5px;
+    border-left: 4px solid #4CAF50;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.details-card p {
+    margin-bottom: 10px;
+}
+
+.details-card a {
+    color: #4CAF50;
+    text-decoration: none;
+}
+
+.details-card a:hover {
+    text-decoration: underline;
+}
+
+.venue-shows-list,
+.artist-shows-list {
+    margin-top: 20px;
+}
+
+.venue-date-header,
+.artist-date-header {
+    font-weight: bold;
+    padding: 8px 0;
+    margin-top: 15px;
+    border-bottom: 1px solid #4CAF50;
+}
+
+.venue-show-item,
+.artist-show-item {
+    display: flex;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.venue-show-item:last-child,
+.artist-show-item:last-child {
+    border-bottom: none;
+}
+
+.venue-show-time,
+.artist-show-time {
+    flex: 0 0 80px;
+    font-weight: bold;
+    color: #4CAF50;
+}
+
+.venue-show-details,
+.artist-show-details {
+    flex: 1;
+}
+
+.venue-show-artist,
+.artist-show-venue {
+    font-weight: bold;
+    margin-bottom: 3px;
+    color: #333;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.venue-show-artist:hover,
+.artist-show-venue:hover {
+    color: #4CAF50;
+    text-decoration: underline;
+}
+
+.venue-show-price,
+.artist-show-price {
+    font-size: 0.9em;
+    color: #666;
+}
+
+.artist-show-address {
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 3px;
+}
+
+.error {
+    color: #f44336;
+    font-weight: bold;
+    padding: 15px;
+    background-color: #ffebee;
+    border-radius: 4px;
+}
+
+.loading {
+    color: #666;
+    font-style: italic;
+}

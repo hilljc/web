@@ -25,6 +25,27 @@ app.get('/api/artists', (req, res) => {
     }
 });
 
+// Route to get a specific artist by ID
+app.get('/api/artists/:id', (req, res) => {
+    try {
+        const artistId = parseInt(req.params.id);
+        const csvFilePath = path.join(__dirname, 'artists.csv');
+        const csvData = fs.readFileSync(csvFilePath, 'utf8');
+        
+        const artists = parseCSV(csvData);
+        const artist = artists.find(a => a.id === artistId);
+        
+        if (!artist) {
+            return res.status(404).json({ error: 'Artist not found' });
+        }
+        
+        res.json(artist);
+    } catch (error) {
+        console.error('Error retrieving artist data:', error);
+        res.status(500).json({ error: 'Failed to retrieve artist data' });
+    }
+});
+
 // Route to get all venues
 app.get('/api/venues', (req, res) => {
     try {
@@ -37,6 +58,27 @@ app.get('/api/venues', (req, res) => {
     } catch (error) {
         console.error('Error reading venues CSV file:', error);
         res.status(500).json({ error: 'Failed to read venues data' });
+    }
+});
+
+// Route to get a specific venue by ID
+app.get('/api/venues/:id', (req, res) => {
+    try {
+        const venueId = parseInt(req.params.id);
+        const csvFilePath = path.join(__dirname, 'venues.csv');
+        const csvData = fs.readFileSync(csvFilePath, 'utf8');
+        
+        const venues = parseCSV(csvData);
+        const venue = venues.find(v => v.id === venueId);
+        
+        if (!venue) {
+            return res.status(404).json({ error: 'Venue not found' });
+        }
+        
+        res.json(venue);
+    } catch (error) {
+        console.error('Error retrieving venue data:', error);
+        res.status(500).json({ error: 'Failed to retrieve venue data' });
     }
 });
 
@@ -69,7 +111,7 @@ app.get('/api/shows', (req, res) => {
         }, {});
         
         // Join data
-        const joinedShows = shows.map(show => {
+        let joinedShows = shows.map(show => {
             const artist = artistMap[show.artistId] || { name: 'Unknown Artist' };
             const venue = venueMap[show.venueId] || { name: 'Unknown Venue', address: 'No address' };
             
@@ -87,6 +129,21 @@ app.get('/api/shows', (req, res) => {
                 capacity: venue.capacity
             };
         });
+        
+        // Apply filters if provided
+        if (req.query.artistId) {
+            const artistId = parseInt(req.query.artistId);
+            joinedShows = joinedShows.filter(show => show.artistId === artistId);
+        }
+        
+        if (req.query.venueId) {
+            const venueId = parseInt(req.query.venueId);
+            joinedShows = joinedShows.filter(show => show.venueId === venueId);
+        }
+        
+        if (req.query.date) {
+            joinedShows = joinedShows.filter(show => show.date === req.query.date);
+        }
         
         res.json(joinedShows);
     } catch (error) {
