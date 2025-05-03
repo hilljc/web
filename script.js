@@ -26,6 +26,56 @@ async function fetchShows() {
     }
 }
 
+// Group shows based on sorting method
+function groupShows(shows, sortBy) {
+    const grouped = {};
+    
+    shows.forEach(show => {
+        let key;
+        
+        // Determine grouping key based on sort type
+        switch (sortBy) {
+            case 'date':
+                key = show.date;
+                break;
+            case 'venue':
+                key = show.venue;
+                break;
+            case 'artist':
+                key = show.bandName;
+                break;
+            default:
+                key = show.date;
+        }
+        
+        // Create group if it doesn't exist
+        if (!grouped[key]) {
+            grouped[key] = [];
+        }
+        
+        // Add show to group
+        grouped[key].push(show);
+    });
+    
+    // Sort shows within each group by date
+    Object.keys(grouped).forEach(key => {
+        grouped[key].sort((a, b) => new Date(a.date) - new Date(b.date));
+    });
+    
+    return grouped;
+}
+
+// Format date for display
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+}
+
 // Render shows to the page
 function renderShows(showsToRender) {
     showsContainer.innerHTML = '';
@@ -35,32 +85,91 @@ function renderShows(showsToRender) {
         return;
     }
     
-    // Sort shows based on selected sorting option
+    // Get sorting method
     const sortBy = sortBySelect.value;
+    
+    // First, sort all shows by the selected method
     const sortedShows = sortShows(showsToRender, sortBy);
     
-    sortedShows.forEach(show => {
-        const showCard = document.createElement('div');
-        showCard.classList.add('show-card');
+    // Then group the sorted shows
+    const groupedShows = groupShows(sortedShows, sortBy);
+    
+    // Get group keys and sort them
+    let groupKeys = Object.keys(groupedShows);
+    
+    if (sortBy === 'date') {
+        // Sort date keys chronologically
+        groupKeys.sort((a, b) => new Date(a) - new Date(b));
+    } else {
+        // Sort other keys alphabetically
+        groupKeys.sort();
+    }
+    
+    // Render each group
+    groupKeys.forEach(key => {
+        const shows = groupedShows[key];
         
-        // Format date for display
-        const showDate = new Date(show.date);
-        const formattedDate = showDate.toLocaleDateString('en-US', {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
+        // Create group header
+        const groupHeader = document.createElement('div');
+        groupHeader.classList.add('group-header');
+        
+        switch (sortBy) {
+            case 'date':
+                groupHeader.innerHTML = `<h2>${formatDate(key)}</h2>`;
+                break;
+            case 'venue':
+                groupHeader.innerHTML = `<h2>${key}</h2>`;
+                break;
+            case 'artist':
+                groupHeader.innerHTML = `<h2>${key}</h2>`;
+                break;
+        }
+        
+        showsContainer.appendChild(groupHeader);
+        
+        // Create group container
+        const groupContainer = document.createElement('div');
+        groupContainer.classList.add('show-group');
+        
+        // Add all shows in this group
+        shows.forEach(show => {
+            const showCard = document.createElement('div');
+            showCard.classList.add('show-card');
+            
+            // Format show date for display
+            const formattedDate = formatDate(show.date);
+            
+            // Show different info depending on grouping type
+            if (sortBy === 'date') {
+                // When grouped by date, emphasize time, venue, and artist
+                showCard.innerHTML = `
+                    <h3>${show.bandName}</h3>
+                    <p class="show-info"><strong>Time:</strong> ${formatTime(show.time)}</p>
+                    <p class="show-info"><strong>Venue:</strong> ${show.venue}</p>
+                    <p class="show-info"><strong>Address:</strong> ${show.address}</p>
+                `;
+            } else if (sortBy === 'venue') {
+                // When grouped by venue, emphasize date, time, and artist
+                showCard.innerHTML = `
+                    <h3>${show.bandName}</h3>
+                    <p class="show-info"><strong>Date:</strong> ${formattedDate}</p>
+                    <p class="show-info"><strong>Time:</strong> ${formatTime(show.time)}</p>
+                    <p class="show-info"><strong>Address:</strong> ${show.address}</p>
+                `;
+            } else if (sortBy === 'artist') {
+                // When grouped by artist, emphasize date, time, and venue
+                showCard.innerHTML = `
+                    <p class="show-info"><strong>Date:</strong> ${formattedDate}</p>
+                    <p class="show-info"><strong>Time:</strong> ${formatTime(show.time)}</p>
+                    <p class="show-info"><strong>Venue:</strong> ${show.venue}</p>
+                    <p class="show-info"><strong>Address:</strong> ${show.address}</p>
+                `;
+            }
+            
+            groupContainer.appendChild(showCard);
         });
         
-        showCard.innerHTML = `
-            <h3>${show.bandName}</h3>
-            <p class="show-info"><strong>Date:</strong> ${formattedDate}</p>
-            <p class="show-info"><strong>Time:</strong> ${formatTime(show.time)}</p>
-            <p class="show-info"><strong>Venue:</strong> ${show.venue}</p>
-            <p class="show-info"><strong>Address:</strong> ${show.address}</p>
-        `;
-        
-        showsContainer.appendChild(showCard);
+        showsContainer.appendChild(groupContainer);
     });
 }
 

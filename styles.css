@@ -196,3 +196,35 @@ label {
     background-color: white;
     cursor: pointer;
 }
+
+/* Group header styles */
+.group-header {
+    margin-top: 30px;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #4CAF50;
+}
+
+.group-header h2 {
+    font-size: 1.6em;
+    color: #333;
+}
+
+/* Show group styles */
+.show-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+/* Date groups should be more distinctive */
+.show-group .show-card {
+    border-left: 4px solid #4CAF50;
+    transition: all 0.2s ease;
+}
+
+.show-group .show-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
