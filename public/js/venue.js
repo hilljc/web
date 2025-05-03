@@ -12,6 +12,21 @@ function getVenueIdFromUrl() {
     return venueId ? parseInt(venueId) : null;
 }
 
+// Fetch all venues from the API
+async function fetchAllVenues() {
+    try {
+        const response = await fetch(`${API_URL}/venues`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch venues data');
+        }
+        
+        return await response.json();
+    } catch (error) {
+        console.error('Error loading venues data:', error);
+        return [];
+    }
+}
+
 // Fetch venue data from the API
 async function fetchVenue(venueId) {
     try {
@@ -156,13 +171,45 @@ function renderVenueShows(shows) {
     venueUpcomingShowsContainer.innerHTML = showsHtml;
 }
 
+// Render list of all venues
+function renderVenuesList(venues) {
+    if (!venues || venues.length === 0) {
+        venueDetailsContainer.innerHTML = '<div class="error">No venues found or error loading venues.</div>';
+        return;
+    }
+    
+    // Sort venues alphabetically by name
+    venues.sort((a, b) => a.name.localeCompare(b.name));
+    
+    venueDetailsContainer.innerHTML = `
+        <h1>Music City Venues</h1>
+        <p>Select a venue to view details and upcoming shows:</p>
+        <div class="venues-list">
+            ${venues.map(venue => `
+                <div class="venue-list-item">
+                    <a href="venue.html?id=${venue.id}" class="venue-link">
+                        <h3>${venue.name}</h3>
+                        <p class="venue-address">${venue.address}</p>
+                        <p class="venue-capacity">Capacity: ${venue.capacity}</p>
+                    </a>
+                </div>
+            `).join('')}
+        </div>
+    `;
+    
+    // Hide the upcoming shows container since we're showing all venues
+    venueUpcomingShowsContainer.innerHTML = '';
+    venueUpcomingShowsContainer.style.display = 'none';
+}
+
 // Initial load
 async function init() {
     const venueId = getVenueIdFromUrl();
     
     if (!venueId) {
-        venueDetailsContainer.innerHTML = '<div class="error">No venue ID provided. Please select a venue from the main page.</div>';
-        venueUpcomingShowsContainer.innerHTML = '';
+        // No venue ID provided, show list of all venues
+        const venues = await fetchAllVenues();
+        renderVenuesList(venues);
         return;
     }
     

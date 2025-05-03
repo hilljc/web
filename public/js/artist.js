@@ -12,6 +12,21 @@ function getArtistIdFromUrl() {
     return artistId ? parseInt(artistId) : null;
 }
 
+// Fetch all artists from the API
+async function fetchAllArtists() {
+    try {
+        const response = await fetch(`${API_URL}/artists`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch artists data');
+        }
+        
+        return await response.json();
+    } catch (error) {
+        console.error('Error loading artists data:', error);
+        return [];
+    }
+}
+
 // Fetch artist data from the API
 async function fetchArtist(artistId) {
     try {
@@ -156,13 +171,76 @@ function renderArtistShows(shows) {
     artistUpcomingShowsContainer.innerHTML = showsHtml;
 }
 
+// Render list of all artists
+function renderArtistsList(artists) {
+    if (!artists || artists.length === 0) {
+        artistDetailsContainer.innerHTML = '<div class="error">No artists found or error loading artists.</div>';
+        return;
+    }
+    
+    // Sort artists alphabetically by name
+    artists.sort((a, b) => a.name.localeCompare(b.name));
+
+    // Group artists by first letter for easier browsing
+    const artistsByLetter = {};
+    artists.forEach(artist => {
+        const firstLetter = artist.name.charAt(0).toUpperCase();
+        if (!artistsByLetter[firstLetter]) {
+            artistsByLetter[firstLetter] = [];
+        }
+        artistsByLetter[firstLetter].push(artist);
+    });
+
+    // Create sorted list of letters
+    const letters = Object.keys(artistsByLetter).sort();
+    
+    let html = `
+        <h1>Music City Artists</h1>
+        <p>Select an artist to view details and upcoming shows:</p>
+        <div class="letter-navigation">
+            ${letters.map(letter => `<a href="#letter-${letter}" class="letter-link">${letter}</a>`).join(' ')}
+        </div>
+        <div class="artists-list">
+    `;
+    
+    // Create section for each letter
+    letters.forEach(letter => {
+        const artistsForLetter = artistsByLetter[letter];
+        
+        html += `
+            <div class="letter-section" id="letter-${letter}">
+                <h2 class="letter-heading">${letter}</h2>
+                <div class="artists-by-letter">
+                    ${artistsForLetter.map(artist => `
+                        <div class="artist-list-item">
+                            <a href="artist.html?id=${artist.id}" class="artist-link">
+                                <h3>${artist.name}</h3>
+                                <p class="artist-genre">${artist.genre}</p>
+                                <p class="artist-year">Formed: ${artist.formationYear}</p>
+                            </a>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    });
+    
+    html += '</div>';
+    artistDetailsContainer.innerHTML = html;
+    
+    // Hide the upcoming shows container since we're showing all artists
+    artistUpcomingShowsContainer.innerHTML = '';
+    artistUpcomingShowsContainer.style.display = 'none';
+}
+
 // Initial load
 async function init() {
     const artistId = getArtistIdFromUrl();
     
     if (!artistId) {
-        artistDetailsContainer.innerHTML = '<div class="error">No artist ID provided. Please select an artist from the main page.</div>';
-        artistUpcomingShowsContainer.innerHTML = '';
+        // No artist ID provided, show list of all artists
+        const artists = await fetchAllArtists();
+        renderArtistsList(artists);
         return;
     }
     

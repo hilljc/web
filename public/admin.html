@@ -9,50 +9,89 @@
 </head>
 <body>
     <header>
-        <h1>Admin Panel</h1>
-        <div class="nav-links">
-            <a href="index.html">Back to Shows</a>
+        <div class="header-container">
+            <div class="logo">Music City Events</div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="venue.html">Venues</a></li>
+                    <li><a href="artist.html">Artists</a></li>
+                    <li><a href="admin.html" class="active">Admin</a></li>
+                </ul>
+            </nav>
         </div>
     </header>
     
-    <main id="admin-main">
-        <div id="show-form">
-            <h2>Add/Edit Show</h2>
-            <form id="add-show-form">
-                <div class="form-group">
-                    <label for="artist">Artist:</label>
-                    <select id="artist" name="artist" required>
-                        <option value="">Select an artist</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="venue">Venue:</label>
-                    <select id="venue" name="venue" required>
-                        <option value="">Select a venue</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="date">Date:</label>
-                    <input type="date" id="date" name="date" required>
-                </div>
-                <div class="form-group">
-                    <label for="time">Time:</label>
-                    <input type="time" id="time" name="time" required>
-                </div>
-                <div class="form-group">
-                    <label for="ticket-price">Ticket Price:</label>
-                    <input type="number" id="ticket-price" name="ticket-price" min="0" step="0.01" required>
-                </div>
-                <button type="submit">Add Show</button>
-                <button type="button" id="cancel-edit" style="display: none;">Cancel Edit</button>
-            </form>
-        </div>
+    <div class="page-container">
+        <h1>Admin Panel</h1>
         
-        <div id="admin-shows-container">
-            <h2>Manage Shows</h2>
-            <!-- Shows will be inserted here dynamically -->
+        <main id="admin-main">
+            <div id="show-form">
+                <h2>Add/Edit Show</h2>
+                <form id="add-show-form">
+                    <div class="form-group">
+                        <label for="artist">Artist:</label>
+                        <select id="artist" name="artist" required>
+                            <option value="">Select an artist</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="venue">Venue:</label>
+                        <select id="venue" name="venue" required>
+                            <option value="">Select a venue</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Date:</label>
+                        <input type="date" id="date" name="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="time">Time:</label>
+                        <input type="time" id="time" name="time" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ticket-price">Ticket Price:</label>
+                        <input type="number" id="ticket-price" name="ticket-price" min="0" step="0.01" required>
+                    </div>
+                    <button type="submit">Add Show</button>
+                    <button type="button" id="cancel-edit" style="display: none;">Cancel Edit</button>
+                </form>
+            </div>
+            
+            <div id="admin-shows-container">
+                <h2>Manage Shows</h2>
+                <!-- Shows will be inserted here dynamically -->
+            </div>
+        </main>
+    </div>
+    
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>About Us</h3>
+                <p>Music City Events connects music lovers with their favorite artists and venues.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
         </div>
-    </main>
+        <div class="copyright">
+            &copy; 2025 Music City Events. All rights reserved.
+        </div>
+    </footer>
     
     <script src="js/admin.js"></script>
 </body>
