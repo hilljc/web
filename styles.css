@@ -228,3 +228,84 @@ label {
     transform: translateY(-3px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
+/* Upcoming shows styling */
+.upcoming-shows-list {
+    margin-top: 15px;
+    margin-bottom: 20px;
+}
+
+.upcoming-show-item {
+    display: flex;
+    padding: 10px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.upcoming-show-item:last-child {
+    border-bottom: none;
+}
+
+.upcoming-show-date {
+    flex: 0 0 80px;
+    font-weight: bold;
+    color: #4CAF50;
+}
+
+.upcoming-show-details {
+    flex: 1;
+}
+
+.upcoming-show-band {
+    font-weight: bold;
+    margin-bottom: 3px;
+}
+
+.upcoming-show-venue {
+    font-size: 0.9em;
+    color: #666;
+}
+
+/* Updated upcoming shows styling with date grouping */
+.upcoming-date-header {
+    font-weight: bold;
+    color: #333;
+    padding: 6px 0;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #4CAF50;
+    font-size: 1.1em;
+}
+
+.upcoming-date-shows {
+    margin-left: 5px;
+}
+
+.upcoming-show-item {
+    display: flex;
+    padding: 6px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.upcoming-show-item:last-child {
+    border-bottom: none;
+}
+
+.upcoming-show-time {
+    flex: 0 0 60px;
+    font-weight: bold;
+    color: #4CAF50;
+}
+
+.upcoming-show-details {
+    flex: 1;
+}
+
+.upcoming-show-band {
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+.upcoming-show-venue {
+    font-size: 0.9em;
+    color: #666;
+}

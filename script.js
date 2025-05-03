@@ -7,6 +7,7 @@ const searchInput = document.getElementById('search-input');
 const dateFilter = document.getElementById('date-filter');
 const resetFiltersButton = document.getElementById('reset-filters');
 const sortBySelect = document.getElementById('sort-by');
+const upcomingInfoContainer = document.getElementById('upcoming-info');
 
 // API URL - can be easily updated when moving to a database backend
 const API_URL = 'http://localhost:3000/api';
@@ -229,6 +230,123 @@ function filterShows() {
     renderShows(filteredShows);
 }
 
+// Get shows occurring within the next 7 days
+function getUpcomingShows(allShows, days = 7) {
+    // Set reference date to May 3, 2025 (current date in context)
+    const today = new Date('2025-05-03');
+    const endDate = new Date('2025-05-03');
+    endDate.setDate(today.getDate() + days);
+    
+    return allShows.filter(show => {
+        const showDate = new Date(show.date);
+        return showDate >= today && showDate <= endDate;
+    }).sort((a, b) => new Date(a.date) - new Date(b.date));
+}
+
+// Display upcoming shows in the sidebar, grouped by date
+function displayUpcomingShows(allShows) {
+    // Clear previous content except the heading and current date
+    const heading = upcomingInfoContainer.querySelector('h2');
+    const currentDateElement = upcomingInfoContainer.querySelector('.current-date');
+    upcomingInfoContainer.innerHTML = '';
+    upcomingInfoContainer.appendChild(heading);
+    
+    // Get shows in the next 7 days
+    const upcomingShows = getUpcomingShows(allShows);
+    
+    // If no upcoming shows, display a message
+    if (upcomingShows.length === 0) {
+        const noShowsMessage = document.createElement('p');
+        noShowsMessage.textContent = 'No shows scheduled for the next 7 days.';
+        upcomingInfoContainer.appendChild(noShowsMessage);
+    } else {
+        // Display number of upcoming shows
+        const countMessage = document.createElement('p');
+        countMessage.textContent = `${upcomingShows.length} shows in the next 7 days:`;
+        upcomingInfoContainer.appendChild(countMessage);
+        
+        // Group shows by date
+        const showsByDate = {};
+        upcomingShows.forEach(show => {
+            if (!showsByDate[show.date]) {
+                showsByDate[show.date] = [];
+            }
+            showsByDate[show.date].push(show);
+        });
+        
+        // Get dates and sort them chronologically
+        const dates = Object.keys(showsByDate).sort((a, b) => new Date(a) - new Date(b));
+        
+        // Create container for upcoming shows
+        const upcomingShowsList = document.createElement('div');
+        upcomingShowsList.classList.add('upcoming-shows-list');
+        
+        // For each date, create a group
+        dates.forEach(dateStr => {
+            const showsOnDate = showsByDate[dateStr];
+            
+            // Create date header
+            const dateHeader = document.createElement('div');
+            dateHeader.classList.add('upcoming-date-header');
+            
+            const date = new Date(dateStr);
+            const formattedDate = date.toLocaleDateString('en-US', {
+                weekday: 'long',
+                month: 'short',
+                day: 'numeric'
+            });
+            
+            dateHeader.textContent = formattedDate;
+            upcomingShowsList.appendChild(dateHeader);
+            
+            // Create container for shows on this date
+            const dateShowsList = document.createElement('div');
+            dateShowsList.classList.add('upcoming-date-shows');
+            
+            // Sort shows on this date by time
+            showsOnDate.sort((a, b) => a.time.localeCompare(b.time));
+            
+            // Add each show for this date
+            showsOnDate.forEach(show => {
+                const showItem = document.createElement('div');
+                showItem.classList.add('upcoming-show-item');
+                
+                showItem.innerHTML = `
+                    <div class="upcoming-show-time">${formatTime(show.time)}</div>
+                    <div class="upcoming-show-details">
+                        <div class="upcoming-show-band">${show.bandName}</div>
+                        <div class="upcoming-show-venue">${show.venue}</div>
+                    </div>
+                `;
+                
+                dateShowsList.appendChild(showItem);
+            });
+            
+            upcomingShowsList.appendChild(dateShowsList);
+        });
+        
+        upcomingInfoContainer.appendChild(upcomingShowsList);
+    }
+    
+    // Add back the current date
+    upcomingInfoContainer.appendChild(currentDateElement);
+}
+
+// Update current date
+function updateCurrentDate() {
+    const currentDateElement = document.querySelector('.current-date');
+    if (currentDateElement) {
+        // Use May 3, 2025 as the fixed date
+        const today = new Date('2025-05-03');
+        const formattedDate = today.toLocaleDateString('en-US', {
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric'
+        });
+        currentDateElement.textContent = `Today: ${formattedDate}`;
+    }
+}
+
 // Event listeners
 searchInput.addEventListener('input', filterShows);
 dateFilter.addEventListener('change', filterShows);
@@ -240,23 +358,10 @@ resetFiltersButton.addEventListener('click', function() {
     renderShows(shows);
 });
 
-// Update current date
-function updateCurrentDate() {
-    const currentDateElement = document.querySelector('.current-date');
-    if (currentDateElement) {
-        const today = new Date();
-        const formattedDate = today.toLocaleDateString('en-US', {
-            month: 'long',
-            day: 'numeric',
-            year: 'numeric'
-        });
-        currentDateElement.textContent = `Today: ${formattedDate}`;
-    }
-}
-
 // Initial load
 document.addEventListener('DOMContentLoaded', async function() {
     shows = await fetchShows();
     renderShows(shows);
+    displayUpcomingShows(shows);
     updateCurrentDate();
 });
