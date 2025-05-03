@@ -24,18 +24,18 @@
 
     <div class="page-container">
         <div class="controls-container">
-            <div class="search-filter">
+            <div class="filter-group">
                 <input type="text" id="search-input" placeholder="Search by artist...">
                 <input type="date" id="date-filter">
+                <div class="sort-container">
+                    <label for="sort-by">Sort by:</label>
+                    <select id="sort-by">
+                        <option value="date">Date</option>
+                        <option value="venue">Venue</option>
+                        <option value="artist">Artist</option>
+                    </select>
+                </div>
                 <button id="reset-filters">Reset Filters</button>
-            </div>
-            <div class="sort-container">
-                <label for="sort-by">Sort by:</label>
-                <select id="sort-by">
-                    <option value="date">Date</option>
-                    <option value="venue">Venue</option>
-                    <option value="artist">Artist</option>
-                </select>
             </div>
         </div>
         

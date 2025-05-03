@@ -65,16 +65,17 @@ nav ul li a:hover, nav ul li a.active {
 
 /* Page Container Styling */
 .page-container {
-    max-width: 1200px;
-    margin: 30px auto;
-    padding: 0 20px;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 20px;
     flex: 1;
 }
 
 /* Content Wrapper - New layout for main and sidebar */
 .content-wrapper {
     display: grid;
-    grid-template-columns: 1fr 300px;
+    grid-template-columns: 1fr 250px;
     gap: 30px;
     margin-top: 20px;
 }
@@ -92,7 +93,7 @@ main {
 /* Controls Container */
 .controls-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     margin-bottom: 20px;
     flex-wrap: wrap;
@@ -100,12 +101,12 @@ main {
     width: 100%;
 }
 
-/* Shows Container */
+/* Shows Container - Changed to vertical layout */
 .shows-container {
     width: 100%;
-    display: grid;
+    display: flex;
+    flex-direction: column;
     gap: 20px;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
 }
 
 /* Sidebar Styling */
@@ -115,8 +116,6 @@ main {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     padding: 20px;
     height: fit-content;
-    justify-self: end;
-    width: 100%;
 }
 
 .upcoming-info {
@@ -411,12 +410,13 @@ label {
     color: #333;
 }
 
-/* Show group styles */
+/* Show group styles - Maintain dynamic grid layout within groups */
 .show-group {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 15px;
     margin-bottom: 20px;
+    width: 100%;
 }
 
 /* Date groups should be more distinctive */
@@ -619,4 +619,13 @@ label {
 .loading {
     color: #666;
     font-style: italic;
+}
+
+/* Filter group styling */
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
 }
