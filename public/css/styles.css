@@ -75,7 +75,7 @@ nav ul li a:hover, nav ul li a.active {
 /* Content Wrapper - New layout for main and sidebar */
 .content-wrapper {
     display: grid;
-    grid-template-columns: 1fr 250px;
+    grid-template-columns: 1fr min(25%, 350px);
     gap: 30px;
     margin-top: 20px;
 }
@@ -116,6 +116,9 @@ main {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     padding: 20px;
     height: fit-content;
+    justify-self: end;
+    width: 100%;
+    min-width: 220px;
 }
 
 .upcoming-info {
@@ -628,4 +631,31 @@ label {
     gap: 10px;
     flex-wrap: wrap;
     justify-content: center;
+}
+
+/* Responsive Styling */
+@media (max-width: 900px) {
+    .content-wrapper {
+        grid-template-columns: 1fr;
+    }
+    
+    .sidebar {
+        margin-top: 30px;
+        max-width: none;
+        justify-self: stretch;
+    }
+    
+    .header-container {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    nav ul {
+        justify-content: center;
+    }
+    
+    .controls-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
 }
