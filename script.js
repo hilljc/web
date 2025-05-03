@@ -6,6 +6,7 @@ const showsContainer = document.getElementById('shows-container');
 const searchInput = document.getElementById('search-input');
 const dateFilter = document.getElementById('date-filter');
 const resetFiltersButton = document.getElementById('reset-filters');
+const sortBySelect = document.getElementById('sort-by');
 
 // API URL - can be easily updated when moving to a database backend
 const API_URL = 'http://localhost:3000/api';
@@ -34,8 +35,9 @@ function renderShows(showsToRender) {
         return;
     }
     
-    // Sort shows by date
-    const sortedShows = [...showsToRender].sort((a, b) => new Date(a.date) - new Date(b.date));
+    // Sort shows based on selected sorting option
+    const sortBy = sortBySelect.value;
+    const sortedShows = sortShows(showsToRender, sortBy);
     
     sortedShows.forEach(show => {
         const showCard = document.createElement('div');
@@ -60,6 +62,22 @@ function renderShows(showsToRender) {
         
         showsContainer.appendChild(showCard);
     });
+}
+
+// Sort shows based on the selected option
+function sortShows(showsToSort, sortBy) {
+    const showsCopy = [...showsToSort];
+    
+    switch (sortBy) {
+        case 'date':
+            return showsCopy.sort((a, b) => new Date(a.date) - new Date(b.date));
+        case 'venue':
+            return showsCopy.sort((a, b) => a.venue.localeCompare(b.venue));
+        case 'artist':
+            return showsCopy.sort((a, b) => a.bandName.localeCompare(b.bandName));
+        default:
+            return showsCopy.sort((a, b) => new Date(a.date) - new Date(b.date));
+    }
 }
 
 // Format time from 24-hour to 12-hour format
@@ -105,9 +123,11 @@ function filterShows() {
 // Event listeners
 searchInput.addEventListener('input', filterShows);
 dateFilter.addEventListener('change', filterShows);
+sortBySelect.addEventListener('change', filterShows); // Re-apply filtering when sort option changes
 resetFiltersButton.addEventListener('click', function() {
     searchInput.value = '';
     dateFilter.value = '';
+    sortBySelect.value = 'date'; // Reset to default sort
     renderShows(shows);
 });
 

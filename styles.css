@@ -177,3 +177,22 @@ label {
         grid-template-columns: 1fr;
     }
 }
+
+.sort-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.sort-container label {
+    margin-bottom: 0;
+    font-weight: bold;
+}
+
+#sort-by {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+    cursor: pointer;
+}
