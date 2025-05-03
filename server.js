@@ -10,17 +10,87 @@ app.use(cors()); // Enable CORS for all routes
 app.use(express.json()); // Parse JSON request bodies
 app.use(express.static('.')); // Serve static files from current directory
 
-// Route to get all shows
-app.get('/api/shows', (req, res) => {
+// Route to get all artists
+app.get('/api/artists', (req, res) => {
     try {
-        const csvFilePath = path.join(__dirname, 'shows.csv');
+        const csvFilePath = path.join(__dirname, 'artists.csv');
         const csvData = fs.readFileSync(csvFilePath, 'utf8');
         
         // Parse CSV and return as JSON
-        const shows = parseCSV(csvData);
-        res.json(shows);
+        const artists = parseCSV(csvData);
+        res.json(artists);
     } catch (error) {
-        console.error('Error reading CSV file:', error);
+        console.error('Error reading artists CSV file:', error);
+        res.status(500).json({ error: 'Failed to read artists data' });
+    }
+});
+
+// Route to get all venues
+app.get('/api/venues', (req, res) => {
+    try {
+        const csvFilePath = path.join(__dirname, 'venues.csv');
+        const csvData = fs.readFileSync(csvFilePath, 'utf8');
+        
+        // Parse CSV and return as JSON
+        const venues = parseCSV(csvData);
+        res.json(venues);
+    } catch (error) {
+        console.error('Error reading venues CSV file:', error);
+        res.status(500).json({ error: 'Failed to read venues data' });
+    }
+});
+
+// Route to get all shows with joined artist and venue data
+app.get('/api/shows', (req, res) => {
+    try {
+        // Read all three CSV files
+        const showsPath = path.join(__dirname, 'shows.csv');
+        const artistsPath = path.join(__dirname, 'artists.csv');
+        const venuesPath = path.join(__dirname, 'venues.csv');
+        
+        const showsData = fs.readFileSync(showsPath, 'utf8');
+        const artistsData = fs.readFileSync(artistsPath, 'utf8');
+        const venuesData = fs.readFileSync(venuesPath, 'utf8');
+        
+        // Parse all three files
+        const shows = parseCSV(showsData);
+        const artists = parseCSV(artistsData);
+        const venues = parseCSV(venuesData);
+        
+        // Create lookup maps for artists and venues
+        const artistMap = artists.reduce((map, artist) => {
+            map[artist.id] = artist;
+            return map;
+        }, {});
+        
+        const venueMap = venues.reduce((map, venue) => {
+            map[venue.id] = venue;
+            return map;
+        }, {});
+        
+        // Join data
+        const joinedShows = shows.map(show => {
+            const artist = artistMap[show.artistId] || { name: 'Unknown Artist' };
+            const venue = venueMap[show.venueId] || { name: 'Unknown Venue', address: 'No address' };
+            
+            return {
+                id: show.id,
+                artistId: show.artistId,
+                venueId: show.venueId,
+                date: show.date,
+                time: show.time,
+                ticketPrice: show.ticketPrice,
+                bandName: artist.name,
+                genre: artist.genre,
+                venue: venue.name,
+                address: venue.address,
+                capacity: venue.capacity
+            };
+        });
+        
+        res.json(joinedShows);
+    } catch (error) {
+        console.error('Error reading and joining CSV data:', error);
         res.status(500).json({ error: 'Failed to read shows data' });
     }
 });
@@ -29,7 +99,18 @@ app.get('/api/shows', (req, res) => {
 app.post('/api/shows', (req, res) => {
     try {
         const shows = req.body;
-        const csvData = convertToCSV(shows);
+        
+        // Extract only the columns that belong in the shows.csv file
+        const showsToSave = shows.map(show => ({
+            id: show.id,
+            artistId: show.artistId,
+            venueId: show.venueId,
+            date: show.date,
+            time: show.time,
+            ticketPrice: show.ticketPrice || '0.00'
+        }));
+        
+        const csvData = convertToCSV(showsToSave);
         
         const csvFilePath = path.join(__dirname, 'shows.csv');
         fs.writeFileSync(csvFilePath, csvData, 'utf8');
@@ -48,26 +129,32 @@ function parseCSV(csvString) {
     
     return lines.slice(1).map(line => {
         const values = line.split(',');
-        const show = {};
+        const item = {};
         
         headers.forEach((header, index) => {
-            // Convert id to number
-            if (header === 'id') {
-                show[header] = parseInt(values[index]);
+            // Convert numeric values where appropriate
+            if (header === 'id' || header === 'artistId' || header === 'venueId' || header === 'capacity' || header === 'formationYear') {
+                item[header] = parseInt(values[index]);
+            } else if (header === 'ticketPrice') {
+                item[header] = parseFloat(values[index]);
             } else {
-                show[header] = values[index];
+                item[header] = values[index];
             }
         });
         
-        return show;
+        return item;
     });
 }
 
-// Helper function to convert shows to CSV
-function convertToCSV(shows) {
-    const headers = Object.keys(shows[0]).join(',');
-    const rows = shows.map(show => {
-        return Object.values(show).join(',');
+// Helper function to convert data to CSV
+function convertToCSV(items) {
+    if (!items || items.length === 0) {
+        return '';
+    }
+    
+    const headers = Object.keys(items[0]).join(',');
+    const rows = items.map(item => {
+        return Object.values(item).join(',');
     });
     
     return [headers, ...rows].join('\n');
