@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "name": "Electric Pulse",
+    "genre": "Electronic Rock",
+    "formationYear": 2019,
+    "website": "http://electricpulse.example.com"
+  },
+  {
+    "id": 2,
+    "name": "Cosmic Carousel",
+    "genre": "Psychedelic Pop",
+    "formationYear": 2018,
+    "website": "http://cosmiccarousel.example.com"
+  },
+  {
+    "id": 3,
+    "name": "Velvet Thunder",
+    "genre": "Heavy Metal",
+    "formationYear": 2017,
+    "website": "http://velvetthunder.example.com"
+  },
+  {
+    "id": 4,
+    "name": "Lunar Tides",
+    "genre": "Ambient Folk",
+    "formationYear": 2020,
+    "website": "http://lunartides.example.com"
+  },
+  {
+    "id": 5,
+    "name": "Digital Sunset",
+    "genre": "Synthwave",
+    "formationYear": 2021,
+    "website": "http://digitalsunset.example.com"
+  },
+  {
+    "id": 6,
+    "name": "Midnight Reverie",
+    "genre": "Jazz Fusion",
+    "formationYear": 2016,
+    "website": "http://midnightreverie.example.com"
+  },
+  {
+    "id": 7,
+    "name": "Crystal Echoes",
+    "genre": "Dream Pop",
+    "formationYear": 2019,
+    "website": "http://crystalechoes.example.com"
+  },
+  {
+    "id": 8,
+    "name": "Quantum Groove",
+    "genre": "Experimental Electronic",
+    "formationYear": 2020,
+    "website": "http://quantumgroove.example.com"
+  },
+  {
+    "id": 9,
+    "name": "Phoenix Rising",
+    "genre": "Progressive Rock",
+    "formationYear": 2015,
+    "website": "http://phoenixrising.example.com"
+  },
+  {
+    "id": 10,
+    "name": "Urban Folklore",
+    "genre": "Hip Hop Folk",
+    "formationYear": 2018,
+    "website": "http://urbanfolklore.example.com"
+  }
+]

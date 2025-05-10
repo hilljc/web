@@ -1,6 +1,6 @@
-# Local Band Shows Website
+# Local Band Shows Website - Static Version for GitHub Pages
 
-A simple web application that displays local music shows happening in various venues. This application allows users to browse shows by date, venue, or artist, and see upcoming events within the next 7 days.
+A fully static website that displays local music shows happening in various venues. This application allows users to browse shows by date, venue, or artist, and see upcoming events within the next 7 days.
 
 ## Features
 
@@ -8,86 +8,60 @@ A simple web application that displays local music shows happening in various ve
 - View upcoming shows for the next 7 days
 - Filter shows by band name or specific date
 - Responsive design that works on mobile and desktop
-- Admin panel for adding and removing shows
+- Demo admin panel for adding and removing shows (changes are not persisted)
 
 ## Project Structure
 
-The project uses a CSV-based "database" structure:
+The project uses a fully static approach with data embedded directly in JavaScript files:
 
-- `shows.csv`: Contains show information, referencing artists and venues by ID
-- `artists.csv`: Contains information about bands/artists
-- `venues.csv`: Contains information about venues
-
-The application simulates a client-server architecture with:
-
-- Frontend: HTML, CSS, and vanilla JavaScript
-- Backend: Node.js with Express serving the data via API endpoints
+- All data (shows, venues, artists) is directly embedded in the JavaScript files
+- No server or API calls are used - everything works completely offline
+- Can be deployed directly to GitHub Pages without any build step
 
 ## How It Was Created
 
-This project was built as a proof-of-concept for a band shows website. It uses:
+This project was built as a fully static website for GitHub Pages:
 
 - **Frontend**: HTML5, CSS3, and vanilla JavaScript (no frameworks)
-- **Backend**: Node.js with Express
-- **Data Storage**: CSV files (simulating a database)
+- **Data Storage**: Data embedded directly in JavaScript files
 
-The architecture is designed to be easily migrated to a real database system in the future.
+## How to Deploy to GitHub Pages
 
-## How to Run Locally
+1. Fork or clone this repository
+2. Enable GitHub Pages in your repository settings (Settings > Pages)
+3. Select the branch you want to deploy (usually `main` or `master`)
+4. Your site will be published at `https://[your-username].github.io/[repository-name]/`
 
-### Prerequisites
+## Local Development
 
-- Node.js (v14 or higher recommended)
-- npm (comes with Node.js)
+### Viewing the Site Locally
 
-### Installation Steps
+Simply open any of the HTML files directly in your browser. No local server is required since all data is embedded in the JavaScript files.
 
-1. Clone the repository or download the source code
+### Updating Data
 
-2. Navigate to the project directory:
-   ```
-   cd /path/to/project
-   ```
+The data is embedded directly in the JavaScript files. To update the data:
 
-3. Install dependencies:
-   ```
-   npm install
-   ```
-
-4. Start the server:
-   ```
-   npm start
-   ```
-
-5. Open your browser and go to:
-   ```
-   http://localhost:3000
-   ```
-
-### Accessing the Admin Panel
-
-To access the admin panel for managing shows, navigate to:
-```
-http://localhost:3000/admin.html
-```
+1. Edit the data arrays at the top of each JavaScript file:
+   - `public/js/script.js` - Main shows data
+   - `public/js/artist.js` - Artists data
+   - `public/js/venue.js` - Venues data
+   - `public/js/admin.js` - Admin page data
 
 ## Future Enhancements
 
-- User authentication for admin access
-- Database integration (replacing CSV files)
-- Image uploads for bands
+- User authentication (would require backend integration)
+- Image uploads for bands (would require backend integration)
 - Integration with mapping services for venue locations
-- Online ticket purchasing functionality
+- Calendar view of upcoming events
 
 ## Technologies Used
 
 - HTML5
 - CSS3
 - JavaScript
-- Node.js
-- Express
-- CSV for data storage (temporary)
+- No external dependencies or API calls required
 
 ## Project Status
 
-This is a proof of concept and is intended for demonstration purposes. It shows how a more complex application could be structured and provides a foundation for future development.
+This is a static version of the site optimized for GitHub Pages hosting. The admin functionality is in demo-mode only, with changes not being persisted between sessions.

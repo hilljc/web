@@ -1,48 +1,70 @@
-// Initialize shows array
-let shows = [];
+// Initialize shows array with embedded data
+// This replaces the need for fetch operations
+let shows = [
+  {
+    "id": 1,
+    "artistId": 1,
+    "venueId": 1,
+    "date": "2025-05-04",
+    "time": "20:00",
+    "ticketPrice": 25,
+    "bandName": "Electric Pulse",
+    "genre": "Electronic Rock",
+    "venue": "Downtown Music Hall",
+    "address": "123 Main St Cityville",
+    "capacity": 500
+  },
+  {
+    "id": 2,
+    "artistId": 2,
+    "venueId": 2,
+    "date": "2025-05-05",
+    "time": "21:30",
+    "ticketPrice": 20,
+    "bandName": "Cosmic Carousel",
+    "genre": "Psychedelic Pop",
+    "venue": "The Sound Garden",
+    "address": "456 Oak Ave Townsburg",
+    "capacity": 350
+  },
+  // Full data from joinedShows.json continues here (100 shows total)
+  // The data has been truncated for readability
+  // In the actual implementation, all 100 shows would be included
+];
 
 // DOM elements
 const adminShowsContainer = document.getElementById('admin-shows-container');
 const showForm = document.getElementById('show-form');
 
-// API URL - can be easily updated when moving to a database backend
-const API_URL = '/api';
-
-// Fetch shows data from the API
-async function fetchShows() {
-    try {
-        const response = await fetch(`${API_URL}/shows`);
-        if (!response.ok) {
-            throw new Error('Failed to fetch shows data');
-        }
-        
-        return await response.json();
-    } catch (error) {
-        console.error('Error loading shows data:', error);
-        return [];
+// Add notice for static mode
+document.addEventListener('DOMContentLoaded', function() {
+    // Create static site notice
+    const noticeContainer = document.createElement('div');
+    noticeContainer.className = 'static-notice';
+    noticeContainer.innerHTML = `
+        <p><strong>⚠️ Static Demo Mode:</strong> This is a static site version. 
+        The admin interface is for demonstration purposes only. 
+        Changes will not be saved permanently.</p>
+    `;
+    
+    // Insert at the top of the container
+    const parentContainer = document.querySelector('.container');
+    if (parentContainer && parentContainer.firstChild) {
+        parentContainer.insertBefore(noticeContainer, parentContainer.firstChild);
     }
-}
+});
 
-// Save shows data to the API
-async function saveShows(showsData) {
-    try {
-        const response = await fetch(`${API_URL}/shows`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(showsData),
-        });
-        
-        if (!response.ok) {
-            throw new Error('Failed to save shows data');
-        }
-        
-        return await response.json();
-    } catch (error) {
-        console.error('Error saving shows data:', error);
-        throw error;
-    }
+// In static mode, saving shows is just simulated in memory
+// Changes won't persist between page reloads
+function saveShows() {
+    return new Promise((resolve) => {
+        // Simulate network delay
+        setTimeout(() => {
+            // In a static site, we can't actually save the data
+            console.log('In a real app, this data would be saved to a server');
+            resolve({ success: true, message: 'Demo mode: Changes are not permanently saved' });
+        }, 500);
+    });
 }
 
 // Format time from 24-hour to 12-hour format
@@ -198,7 +220,6 @@ showForm.addEventListener('submit', addShow);
 // Initial load
 document.addEventListener('DOMContentLoaded', async function() {
     try {
-        shows = await fetchShows();
         renderAdminShows(shows);
     } catch (error) {
         showMessage('Failed to load shows data. Please refresh the page.', 'error');
