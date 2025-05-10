@@ -1,165 +1,41 @@
-// Venues data embedded directly in the JS file
-// This eliminates the need for fetch operations
-const venues = [
-  {
-    "id": 1,
-    "name": "Downtown Music Hall",
-    "address": "123 Main St Cityville",
-    "capacity": 500,
-    "contactPhone": "555-123-4567",
-    "website": "http://downtownmusichall.example.com"
-  },
-  {
-    "id": 2,
-    "name": "The Sound Garden",
-    "address": "456 Oak Ave Townsburg",
-    "capacity": 350,
-    "contactPhone": "555-234-5678",
-    "website": "http://thesoundgarden.example.com"
-  },
-  {
-    "id": 3,
-    "name": "Rhythm Club",
-    "address": "789 Pine Rd Villageton",
-    "capacity": 250,
-    "contactPhone": "555-345-6789",
-    "website": "http://rhythmclub.example.com"
-  },
-  {
-    "id": 4,
-    "name": "The Basement",
-    "address": "567 Underground St Musictown",
-    "capacity": 150,
-    "contactPhone": "555-456-7890",
-    "website": "http://thebasement.example.com"
-  },
-  {
-    "id": 5,
-    "name": "Soundscape Lounge",
-    "address": "890 Echo Blvd Melodycity",
-    "capacity": 200,
-    "contactPhone": "555-567-8901",
-    "website": "http://soundscapelounge.example.com"
-  },
-  {
-    "id": 6,
-    "name": "Harmony Hub",
-    "address": "234 Rhythm Ave Beatsville",
-    "capacity": 300,
-    "contactPhone": "555-678-9012",
-    "website": "http://harmonyhub.example.com"
-  },
-  {
-    "id": 7,
-    "name": "The Amplified Room",
-    "address": "678 Guitar St Rockville",
-    "capacity": 180,
-    "contactPhone": "555-789-0123",
-    "website": "http://amplifiedroom.example.com"
-  },
-  {
-    "id": 8,
-    "name": "Retro Records Live",
-    "address": "345 Vintage Rd Vinyltown",
-    "capacity": 220,
-    "contactPhone": "555-890-1234",
-    "website": "http://retrorecordslive.example.com"
-  },
-  {
-    "id": 9,
-    "name": "Starlight Stage",
-    "address": "789 Cosmos Dr Moonbeam",
-    "capacity": 450,
-    "contactPhone": "555-901-2345",
-    "website": "http://starlightstage.example.com"
-  },
-  {
-    "id": 10,
-    "name": "Timber Tavern",
-    "address": "123 Forest Ln Woodsville",
-    "capacity": 175,
-    "contactPhone": "555-012-3456",
-    "website": "http://timbertavern.example.com"
-  },
-  {
-    "id": 11,
-    "name": "The Circuit Board",
-    "address": "456 Tech Ave Bytetown",
-    "capacity": 225,
-    "contactPhone": "555-123-4567",
-    "website": "http://thecircuitboard.example.com"
-  },
-  {
-    "id": 12,
-    "name": "Bourbon & Blues",
-    "address": "789 Rye St Spiritsville",
-    "capacity": 280,
-    "contactPhone": "555-234-5678",
-    "website": "http://bourbonandblues.example.com"
-  },
-  {
-    "id": 13,
-    "name": "After Hours Club",
-    "address": "234 Late Night Blvd Dusktown",
-    "capacity": 200,
-    "contactPhone": "555-345-6789",
-    "website": "http://afterhoursclub.example.com"
-  },
-  {
-    "id": 14,
-    "name": "Green Room Lounge",
-    "address": "567 Jade St Verdantville",
-    "capacity": 190,
-    "contactPhone": "555-456-7890",
-    "website": "http://greenroomlounge.example.com"
-  },
-  {
-    "id": 15,
-    "name": "The Horn Section",
-    "address": "890 Trumpet Rd Brasstown",
-    "capacity": 240,
-    "contactPhone": "555-567-8901",
-    "website": "http://thehornsection.example.com"
-  }
-];
-
-// Shows data is the same as in script.js
-// This data is reused here for venue-specific filtering
-const shows = [
-  {
-    "id": 1,
-    "artistId": 1,
-    "venueId": 1,
-    "date": "2025-05-04",
-    "time": "20:00",
-    "ticketPrice": 25,
-    "bandName": "Electric Pulse",
-    "genre": "Electronic Rock",
-    "venue": "Downtown Music Hall",
-    "address": "123 Main St Cityville",
-    "capacity": 500
-  },
-  {
-    "id": 2,
-    "artistId": 2,
-    "venueId": 2,
-    "date": "2025-05-05",
-    "time": "21:30",
-    "ticketPrice": 20,
-    "bandName": "Cosmic Carousel",
-    "genre": "Psychedelic Pop",
-    "venue": "The Sound Garden",
-    "address": "456 Oak Ave Townsburg",
-    "capacity": 350
-  },
-  // Full data from joinedShows.json continues here (100 shows total)
-  // The data has been truncated for readability
-  // In the actual implementation, all 100 shows would be included
-];
+// Initialize data variables
+let venues = [];
+let shows = [];
 
 // DOM elements
 const venueDetailsContainer = document.getElementById('venue-details');
 const venueUpcomingShowsContainer = document.getElementById('venue-upcoming-shows');
+
+// Load venues data from JSON file
+async function loadVenues() {
+    try {
+        const response = await fetch('./data/venues.json');
+        if (!response.ok) {
+            throw new Error(`Failed to fetch venues data: ${response.statusText}`);
+        }
+        venues = await response.json();
+        return venues;
+    } catch (error) {
+        console.error('Error loading venues data:', error);
+        venueDetailsContainer.innerHTML = '<div class="error">Failed to load venue data. Please try again later.</div>';
+        return [];
+    }
+}
+
+// Load shows data from JSON file
+async function loadShows() {
+    try {
+        const response = await fetch('./data/joinedShows.json');
+        if (!response.ok) {
+            throw new Error(`Failed to fetch shows data: ${response.statusText}`);
+        }
+        shows = await response.json();
+        return shows;
+    } catch (error) {
+        console.error('Error loading shows data:', error);
+        return [];
+    }
+}
 
 // Parse the venue ID from the URL query string
 function getVenueIdFromUrl() {
@@ -326,6 +202,9 @@ function renderVenuesList(venues) {
 // Initial load
 async function init() {
     const venueId = getVenueIdFromUrl();
+    
+    await loadVenues();
+    await loadShows();
     
     if (!venueId) {
         // No venue ID provided, show list of all venues

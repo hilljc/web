@@ -1,116 +1,41 @@
-// Artists data embedded directly in the JS file
-// This eliminates the need for fetch operations
-const artists = [
-  {
-    "id": 1,
-    "name": "Electric Pulse",
-    "genre": "Electronic Rock",
-    "formationYear": 2019,
-    "website": "http://electricpulse.example.com"
-  },
-  {
-    "id": 2,
-    "name": "Cosmic Carousel",
-    "genre": "Psychedelic Pop",
-    "formationYear": 2018,
-    "website": "http://cosmiccarousel.example.com"
-  },
-  {
-    "id": 3,
-    "name": "Velvet Thunder",
-    "genre": "Heavy Metal",
-    "formationYear": 2017,
-    "website": "http://velvetthunder.example.com"
-  },
-  {
-    "id": 4,
-    "name": "Lunar Tides",
-    "genre": "Ambient Folk",
-    "formationYear": 2020,
-    "website": "http://lunartides.example.com"
-  },
-  {
-    "id": 5,
-    "name": "Digital Sunset",
-    "genre": "Synthwave",
-    "formationYear": 2021,
-    "website": "http://digitalsunset.example.com"
-  },
-  {
-    "id": 6,
-    "name": "Midnight Reverie",
-    "genre": "Jazz Fusion",
-    "formationYear": 2016,
-    "website": "http://midnightreverie.example.com"
-  },
-  {
-    "id": 7,
-    "name": "Crystal Echoes",
-    "genre": "Dream Pop",
-    "formationYear": 2019,
-    "website": "http://crystalechoes.example.com"
-  },
-  {
-    "id": 8,
-    "name": "Quantum Groove",
-    "genre": "Experimental Electronic",
-    "formationYear": 2020,
-    "website": "http://quantumgroove.example.com"
-  },
-  {
-    "id": 9,
-    "name": "Phoenix Rising",
-    "genre": "Progressive Rock",
-    "formationYear": 2015,
-    "website": "http://phoenixrising.example.com"
-  },
-  {
-    "id": 10,
-    "name": "Urban Folklore",
-    "genre": "Hip Hop Folk",
-    "formationYear": 2018,
-    "website": "http://urbanfolklore.example.com"
-  }
-];
-
-// Shows data is the same as in script.js
-// This data is reused here for artist-specific filtering
-// In a production environment, we might use a shared data file
-const shows = [
-  {
-    "id": 1,
-    "artistId": 1,
-    "venueId": 1,
-    "date": "2025-05-04",
-    "time": "20:00",
-    "ticketPrice": 25,
-    "bandName": "Electric Pulse",
-    "genre": "Electronic Rock",
-    "venue": "Downtown Music Hall",
-    "address": "123 Main St Cityville",
-    "capacity": 500
-  },
-  {
-    "id": 2,
-    "artistId": 2,
-    "venueId": 2,
-    "date": "2025-05-05",
-    "time": "21:30",
-    "ticketPrice": 20,
-    "bandName": "Cosmic Carousel",
-    "genre": "Psychedelic Pop",
-    "venue": "The Sound Garden",
-    "address": "456 Oak Ave Townsburg",
-    "capacity": 350
-  },
-  // Full data from joinedShows.json continues here (100 shows total)
-  // The data has been truncated for readability
-  // In the actual implementation, all 100 shows would be included
-];
+// Initialize data variables
+let artists = [];
+let shows = [];
 
 // DOM elements
 const artistDetailsContainer = document.getElementById('artist-details');
 const artistUpcomingShowsContainer = document.getElementById('artist-upcoming-shows');
+
+// Load artists data from JSON file
+async function loadArtists() {
+    try {
+        const response = await fetch('./data/artists.json');
+        if (!response.ok) {
+            throw new Error(`Failed to fetch artists data: ${response.statusText}`);
+        }
+        artists = await response.json();
+        return artists;
+    } catch (error) {
+        console.error('Error loading artists data:', error);
+        artistDetailsContainer.innerHTML = '<div class="error">Failed to load artist data. Please try again later.</div>';
+        return [];
+    }
+}
+
+// Load shows data from JSON file
+async function loadShows() {
+    try {
+        const response = await fetch('./data/joinedShows.json');
+        if (!response.ok) {
+            throw new Error(`Failed to fetch shows data: ${response.statusText}`);
+        }
+        shows = await response.json();
+        return shows;
+    } catch (error) {
+        console.error('Error loading shows data:', error);
+        return [];
+    }
+}
 
 // Parse the artist ID from the URL query string
 function getArtistIdFromUrl() {
@@ -311,15 +236,18 @@ async function init() {
     
     if (!artistId) {
         // No artist ID provided, show list of all artists
+        const artists = await loadArtists();
         renderArtistsList(artists);
         return;
     }
     
+    const artists = await loadArtists();
+    const shows = await loadShows();
     const artist = getArtist(artistId);
     renderArtistDetails(artist);
     
-    const shows = getArtistShows(artistId);
-    renderArtistShows(shows);
+    const artistShows = getArtistShows(artistId);
+    renderArtistShows(artistShows);
 }
 
 document.addEventListener('DOMContentLoaded', init);

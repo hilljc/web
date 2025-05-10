@@ -1,36 +1,5 @@
-// Initialize shows array with embedded data
-// This replaces the need for fetch operations
-const shows = [
-  {
-    "id": 1,
-    "artistId": 1,
-    "venueId": 1,
-    "date": "2025-05-04",
-    "time": "20:00",
-    "ticketPrice": 25,
-    "bandName": "Electric Pulse",
-    "genre": "Electronic Rock",
-    "venue": "Downtown Music Hall",
-    "address": "123 Main St Cityville",
-    "capacity": 500
-  },
-  {
-    "id": 2,
-    "artistId": 2,
-    "venueId": 2,
-    "date": "2025-05-05",
-    "time": "21:30",
-    "ticketPrice": 20,
-    "bandName": "Cosmic Carousel",
-    "genre": "Psychedelic Pop",
-    "venue": "The Sound Garden",
-    "address": "456 Oak Ave Townsburg",
-    "capacity": 350
-  },
-  // Full data from joinedShows.json continues here (100 shows total)
-  // The data has been truncated for readability
-  // In the actual implementation, all 100 shows would be included
-];
+// Initialize shows array
+let shows = [];
 
 // DOM elements
 const showsContainer = document.getElementById('shows-container');
@@ -39,6 +8,22 @@ const dateFilter = document.getElementById('date-filter');
 const resetFiltersButton = document.getElementById('reset-filters');
 const sortBySelect = document.getElementById('sort-by');
 const upcomingInfoContainer = document.getElementById('upcoming-info');
+
+// Load shows data from JSON file
+async function loadShows() {
+    try {
+        const response = await fetch('./data/joinedShows.json');
+        if (!response.ok) {
+            throw new Error(`Failed to fetch shows data: ${response.statusText}`);
+        }
+        shows = await response.json();
+        return shows;
+    } catch (error) {
+        console.error('Error loading shows data:', error);
+        showsContainer.innerHTML = '<div class="error">Failed to load shows data. Please try again later.</div>';
+        return [];
+    }
+}
 
 // Group shows based on sorting method
 function groupShows(shows, sortBy) {
@@ -391,7 +376,8 @@ resetFiltersButton.addEventListener('click', function() {
 });
 
 // Initial load - no need for async function or fetch
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
+    await loadShows();
     renderShows(shows);
     displayUpcomingShows(shows);
     updateCurrentDate();

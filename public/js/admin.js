@@ -1,36 +1,5 @@
-// Initialize shows array with embedded data
-// This replaces the need for fetch operations
-let shows = [
-  {
-    "id": 1,
-    "artistId": 1,
-    "venueId": 1,
-    "date": "2025-05-04",
-    "time": "20:00",
-    "ticketPrice": 25,
-    "bandName": "Electric Pulse",
-    "genre": "Electronic Rock",
-    "venue": "Downtown Music Hall",
-    "address": "123 Main St Cityville",
-    "capacity": 500
-  },
-  {
-    "id": 2,
-    "artistId": 2,
-    "venueId": 2,
-    "date": "2025-05-05",
-    "time": "21:30",
-    "ticketPrice": 20,
-    "bandName": "Cosmic Carousel",
-    "genre": "Psychedelic Pop",
-    "venue": "The Sound Garden",
-    "address": "456 Oak Ave Townsburg",
-    "capacity": 350
-  },
-  // Full data from joinedShows.json continues here (100 shows total)
-  // The data has been truncated for readability
-  // In the actual implementation, all 100 shows would be included
-];
+// Initialize shows array
+let shows = [];
 
 // DOM elements
 const adminShowsContainer = document.getElementById('admin-shows-container');
@@ -53,6 +22,22 @@ document.addEventListener('DOMContentLoaded', function() {
         parentContainer.insertBefore(noticeContainer, parentContainer.firstChild);
     }
 });
+
+// Load shows data from JSON file
+async function loadShows() {
+    try {
+        const response = await fetch('./data/joinedShows.json');
+        if (!response.ok) {
+            throw new Error(`Failed to fetch shows data: ${response.statusText}`);
+        }
+        shows = await response.json();
+        return shows;
+    } catch (error) {
+        console.error('Error loading shows data:', error);
+        adminShowsContainer.innerHTML = '<div class="error">Failed to load shows data. Please try again later.</div>';
+        return [];
+    }
+}
 
 // In static mode, saving shows is just simulated in memory
 // Changes won't persist between page reloads
@@ -220,6 +205,7 @@ showForm.addEventListener('submit', addShow);
 // Initial load
 document.addEventListener('DOMContentLoaded', async function() {
     try {
+        await loadShows();
         renderAdminShows(shows);
     } catch (error) {
         showMessage('Failed to load shows data. Please refresh the page.', 'error');

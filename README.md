@@ -1,6 +1,6 @@
-# Local Band Shows Website - Static Version for GitHub Pages
+# Naples Live Music - Static Website for GitHub Pages
 
-A fully static website that displays local music shows happening in various venues. This application allows users to browse shows by date, venue, or artist, and see upcoming events within the next 7 days.
+A fully static website that displays local music shows happening in various venues in Naples. This application allows users to browse shows by date, venue, or artist, and see upcoming events within the next 7 days.
 
 ## Features
 
@@ -12,10 +12,11 @@ A fully static website that displays local music shows happening in various venu
 
 ## Project Structure
 
-The project uses a fully static approach with data embedded directly in JavaScript files:
+The project uses a fully static approach with data stored in JSON files:
 
-- All data (shows, venues, artists) is directly embedded in the JavaScript files
-- No server or API calls are used - everything works completely offline
+- All data (shows, venues, artists) is stored in static JSON files in the `/public/data/` directory
+- JavaScript files load data from these JSON files
+- No server or API calls to external services - everything loads directly from the static files
 - Can be deployed directly to GitHub Pages without any build step
 
 ## How It Was Created
@@ -23,7 +24,7 @@ The project uses a fully static approach with data embedded directly in JavaScri
 This project was built as a fully static website for GitHub Pages:
 
 - **Frontend**: HTML5, CSS3, and vanilla JavaScript (no frameworks)
-- **Data Storage**: Data embedded directly in JavaScript files
+- **Data Storage**: JSON files loaded via JavaScript fetch API
 
 ## How to Deploy to GitHub Pages
 
@@ -36,17 +37,20 @@ This project was built as a fully static website for GitHub Pages:
 
 ### Viewing the Site Locally
 
-Simply open any of the HTML files directly in your browser. No local server is required since all data is embedded in the JavaScript files.
+Simply open the HTML files in the `/public` directory directly in your browser.
 
 ### Updating Data
 
-The data is embedded directly in the JavaScript files. To update the data:
+The data is stored in JSON files in the `/public/data/` directory:
+   - `public/data/shows.json` - Show information
+   - `public/data/artists.json` - Artists data
+   - `public/data/venues.json` - Venues data
+   - `public/data/joinedShows.json` - Combined show data with artist and venue details
 
-1. Edit the data arrays at the top of each JavaScript file:
-   - `public/js/script.js` - Main shows data
-   - `public/js/artist.js` - Artists data
-   - `public/js/venue.js` - Venues data
-   - `public/js/admin.js` - Admin page data
+If you have new CSV data, you can use the included script to convert it to JSON:
+```
+node convertCsvToJson.js
+```
 
 ## Future Enhancements
 
@@ -60,7 +64,7 @@ The data is embedded directly in the JavaScript files. To update the data:
 - HTML5
 - CSS3
 - JavaScript
-- No external dependencies or API calls required
+- JSON for data storage
 
 ## Project Status
 
